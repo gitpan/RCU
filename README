@@ -11,36 +11,35 @@ DESCRIPTION
     hardware access (RCU::Irman and RCU::Lirc are included, however).
 
   GETTING STARTED
-
-    Please read the RCU::Receipts manpage to get some idea on how to proceed
-    after you installed the module (testing & standard techniques).
+    Please read RCU::Receipts to get some idea on how to proceed after you
+    installed the module (testing & standard techniques).
 
 THE RCU CLASS
     The RCU class provides a general interface to anything you might want to
     do to, it represents your application.
 
     $rcu = new RCU "interface-spec"
-        Creates a new RCU application. `interface' must be an interface
+        Creates a new RCU application. "interface" must be an interface
         specification similar to DBI's DSN:
 
          RCU:ifname:arg:arg...
 
-        Examples: low-level interface (without `RCU::' prefix) or an
+        Examples: low-level interface (without "RCU::" prefix) or an
         arrayref containing name and constructor arguments. If the interface
-        name has a `::' prefix it will be used as-is (without that prefix,
+        name has a "::" prefix it will be used as-is (without that prefix,
         of course).
 
-        For a much better interface, see the RCU::Event manpage.
+        For a much better interface, see RCU::Event.
 
     $rcu->interface
         Return the RCU::Interface object used by this RCU object.
 
     ($keycode, $repeat) = $rcu->get
     ($keycode, $repeat) = $rcu->poll
-        Simplified interface to the RCU (See also the RCU::Event manpage),
-        return a cooked keycode and a repeat count (initial keypress = 0,
-        increasing while the key is pressed). If `get' is called in scalar
-        context it only returns unrepeated keycodes.
+        Simplified interface to the RCU (See also RCU::Event), return a
+        cooked keycode and a repeat count (initial keypress = 0, increasing
+        while the key is pressed). If "get" is called in scalar context it
+        only returns unrepeated keycodes.
 
         This interface is problematic: no key-up events are generated, and
         the repeat events occur pseudo-randomly and have no time relation
@@ -51,7 +50,7 @@ THE RCU::Key CLASS
     This class collects information about rcu keys.
 
 THE RCU::Interface CLASS
-    `RCU::Interface' provides the base class for all rcu interfaces, it is
+    "RCU::Interface" provides the base class for all rcu interfaces, it is
     rarely used directly.
 
     fd  Return a unix filehandle that can be polled, or -1 if this is not
@@ -64,15 +63,15 @@ THE RCU::Interface CLASS
         ("cooked" keys) it will return the cooked name as second value,
         otherwise both return values are identical.
 
-        `get' always returns an event, waiting if neccessary, while `poll'
+        "get" always returns an event, waiting if neccessary, while "poll"
         only checks for an event: If one is pending it is returned,
-        otherwise `poll' returns nothing.
+        otherwise "poll" returns nothing.
 
 SEE ALSO
-    the RCU::Irman manpage, the RCU::Lirc manpage.
+    RCU::Irman, RCU::Lirc.
 
 AUTHOR
-    This perl extension was written by Marc Lehmann <pcg@goof.com>.
+    This perl extension was written by Marc Lehmann <schmorp@schmorp.de>.
 
 BUGS
     No send interface.

@@ -56,7 +56,6 @@ _get_code()
               XPUSHs (sv_2mortal (newSVpvn (code + 20, strchr (code + 20, ' ') - code - 20)));
 
             free (code);
-            free (text);
           }
 
 

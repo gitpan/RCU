@@ -111,4 +111,4 @@ event.
 
 =head1 AUTHOR
 
-This document was wirtten by Marc Lehmann <pcg@goof.com>
+This document was wirtten by Marc Lehmann <schmorp@schmorp.de>

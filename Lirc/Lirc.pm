@@ -116,7 +116,7 @@ sub poll {
 
 =head1 AUTHOR
 
-This perl extension was written by Marc Lehmann <pcg@goof.com>.
+This perl extension was written by Marc Lehmann <schmorp@schmorp.de>.
 
 
 

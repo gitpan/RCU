@@ -16,21 +16,15 @@ See L<RCU>.
 
 package RCU::Irman;
 
-use DynaLoader;
 use Carp;
-use POSIX ();
-use Time::HiRes ();
 use Errno ();
 use Fcntl;
 
 use RCU;
 
-use base qw(RCU::Interface DynaLoader);
+use base qw(RCU::Interface);
 
-BEGIN {
-   $VERSION = 0.01;
-   bootstrap RCU::Irman $VERSION;
-}
+$VERSION = 0.11;
 
 =item new <path>
 
@@ -43,34 +37,26 @@ sub new {
    my $class = shift;
    my $path = shift;
    my $self = $class->SUPER::new();
-   my $fh = local *IRMAN_FH;
+   local (*CW, *CR);
 
-   $self->{fh} = $fh;
+   $self->{fh} = local *IRMAN_FH;
+   $self->{ifh} = local *IRMAN_IFH;
 
-   $self->{pid} = open $fh, "-|";
+   pipe $self->{fh}, CW or die "unable to create communications pipe";
+   pipe CR, $self->{ifh} or die "unable to create communications pipe";
+
+   $self->{pid} = fork;
+
    if ($self->{pid} == 0) {
-      select STDOUT; $|=1;
-      eval {
-         $SIG{HUP} = sub { _exit };
-         !ir_init_commands or croak "unable to init irman command layer: $!";
-         $self->{fd} = ir_init $path || ir_default_portname || croak "irman: no port specified";
-         $self->{fd} >= 0 or croak "unable to connect to irman: $!";
-         print "I\x00";
-         for(;;) {
-            my ($raw, $cooked) = _get_code;
-            print "=".Time::HiRes::time."\x01$raw\x01$cooked\x00";
-         }
-      };
-      if ($@) {
-         $@ =~ s/\x00/\x01/g;
-         print "E$@\x00";
-      }
-      #ir_finish;
-      #ir_free_commands;
-      POSIX::_exit(0);
+      use Config;
+      close $self->{ifh}; close $self->{fh};
+      open STDIN, "<&CR"; open STDOUT, ">&CW"; close STDERR;
+      fcntl STDIN, F_SETFD, 0; fcntl STDOUT, F_SETFD, 0;
+      exec "$Config{installbin}/rcu-irman-helper", "", $path || "";
    } elsif (!defined $self->{pid}) {
       die;
    }
+   close CR; close CW;
    
    $self->get; # wait for I packet
 
@@ -118,7 +104,7 @@ sub poll {
 
 =head1 AUTHOR
 
-This perl extension was written by Marc Lehmann <pcg@goof.com>.
+This perl extension was written by Marc Lehmann <schmorp@schmorp.de>.
 
 
 

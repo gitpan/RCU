@@ -29,7 +29,7 @@ do to, it represents your application.
 
 package RCU;
 
-$VERSION = 0.01;
+$VERSION = 0.021;
 
 use Carp;
 
@@ -262,7 +262,7 @@ L<RCU::Irman>, L<RCU::Lirc>.
 
 =head1 AUTHOR
 
-This perl extension was written by Marc Lehmann <pcg@goof.com>.
+This perl extension was written by Marc Lehmann <schmorp@schmorp.de>.
 
 =head1 BUGS
 

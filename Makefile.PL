@@ -5,8 +5,8 @@ $|=1;
 print <<EOF;
 
 0) build no interface
-1) irman interface
-2) lirc interface
+1) irman interface (requires libirman)
+2) lirc interface (requires lirc)
 3) both interfaces
 
 EOF
